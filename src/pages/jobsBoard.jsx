@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Search,
   Plus,
@@ -13,11 +13,24 @@ import {
 import { fetchJobs } from "../api/jobs";
 
 export default function JobsBoard() {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState("all");
-  const pageSize = 10;
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  
+  // Initialize state from URL params
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [page, setPage] = useState(parseInt(searchParams.get("page") || "1"));
+  const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "all");
+  const pageSize = 10;
+
+  // Update URL when state changes
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (page > 1) params.set("page", page.toString());
+    if (statusFilter !== "all") params.set("status", statusFilter);
+    
+    setSearchParams(params, { replace: true });
+  }, [search, page, statusFilter, setSearchParams]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["jobs", { search, page }],
