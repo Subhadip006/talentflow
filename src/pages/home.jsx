@@ -45,7 +45,7 @@ export default function HomePage() {
               onClick={() => navigate("/login")}
               className="flex items-center justify-center gap-2 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold transition-colors shadow-lg hover:shadow-xl text-lg"
             >
-              Start Free Trial
+              Start Now
               <ArrowRight className="w-5 h-5" />
             </button>
             <button
